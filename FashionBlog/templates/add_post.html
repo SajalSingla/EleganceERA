@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+{% block title%}
+Create a new BlogPost
+{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+    <h1>Add Post</h1>
+    <br>
+    <br>
+    <div class="mb-3">
+        <form method ="Post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.media}} 
+            {{ form.as_p}} 
+            
+            <button class="btn btn-primary">Post</button>
+    </div>
+    <script>
+        var name = "{{ user.id }}";
+
+        document.getElementById("elder").value = name;
+    </script>
+{% else %}
+You must login to add a post...
+{% endif %}
+{% endblock %}

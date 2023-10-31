@@ -1,0 +1,47 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}
+{{ post.title_tag}}
+{% endblock %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<small> By: 
+    {{ post.author }} - {{ post.post_date }} 
+    {% if user.is_authenticated %} 
+        {% if user.id == post.author.id %}  
+        - <a href="{% url 'update_post' post.pk %}">(Edit)</a>
+        <a href="{% url 'delete_post' post.pk %}">(Delete)</a></small><br/>
+        {% endif %}
+    {% endif %}
+<hr>
+{% if post.header_image %}
+    <img src="{{ post.header_image.url }}"> <br>
+{% endif %}
+   
+ 
+{{ post.body|safe }}
+
+<br>
+<br>
+<a href="{% url 'home' %}" class="btn btn-info">Back</a>
+
+<hr>
+<br>
+<form action="{% url 'like_post' post.pk %}" method="POST">
+    {% csrf_token %}
+    {% if user.is_authenticated %}
+        {% if liked %}
+            <button type="submit", name="post_id", value="{{ post.id }}", class="btn btn-danger btn-sm">Unlike</button>
+            
+        {% else %}
+            <button type="submit", name="post_id", value="{{ post.id }}", class="btn btn-primary btn-sm">like</button> 
+        {% endif %}
+    {% else %}
+        <h2><strong>You must login to likse the post!</strong></h2><a class="btn btn-info" href="{% url 'login'  %}">Login</a>
+    {% endif %}
+    - {{ total_likes }} Likes
+</form>
+{% endblock %}
